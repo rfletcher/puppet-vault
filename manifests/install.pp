@@ -3,6 +3,8 @@
 class vault::install {
   $vault_bin = "${::vault::bin_dir}/vault"
 
+  include ::zip
+
   case $::vault::install_method {
       'archive': {
         if $::vault::manage_download_dir {
@@ -10,14 +12,16 @@ class vault::install {
             ensure => directory,
           }
         }
-        archive { "${::vault::download_dir}/${::vault::download_filename}":
-          ensure       => present,
-          extract      => true,
-          extract_path => $::vault::bin_dir,
-          source       => $::vault::download_url,
-          cleanup      => true,
-          creates      => $vault_bin,
-          before       => File[$vault_bin],
+        archive { "vault-${$::vault::version}":
+          ensure        => present,
+          checksum      => $::vault::download_sha256 ? { undef => false, default => true, },
+          digest_string => $::vault::download_sha256,
+          digest_type   => 'sha256',
+          extension     => 'zip',
+          target        => $::vault::bin_dir,
+          url           => $::vault::download_url,
+          before        => File[$vault_bin],
+          require       => Class['::zip'],
         }
       }
 

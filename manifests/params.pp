@@ -10,7 +10,9 @@ class vault::params {
   $manage_group       = true
   $bin_dir            = '/usr/local/bin'
   $config_dir         = '/etc/vault'
-  $download_url       = 'https://releases.hashicorp.com/vault/0.6.2/vault_0.6.2_linux_amd64.zip'
+  $version            = '0.6.2'
+  $download_sha256    = '91432c812b1264306f8d1ecf7dd237c3d7a8b2b6aebf4f887e487c4e7f69338c'
+  $download_url       = "https://releases.hashicorp.com/vault/${version}/vault_${version}_linux_amd64.zip"
   $service_name       = 'vault'
   $num_procs          = $::processorcount
   $install_method     = 'archive'
@@ -19,7 +21,6 @@ class vault::params {
 
   $download_dir        = '/tmp'
   $manage_download_dir = false
-  $download_filename   = 'vault.zip'
 
   # backend and listener are mandatory, we provide some sensible
   # defaults here
